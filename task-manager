@@ -1,0 +1,53 @@
+document.addEventListener('DOMContentLoaded', () => {
+    const taskForm = document.getElementById('task-form');
+    const taskInput = document.getElementById('task-input');
+    const taskList = document.getElementById('task-list');
+
+    taskForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        addTask(taskInput.value);
+        taskInput.value = '';
+    });
+
+    taskList.addEventListener('click', (e) => {
+        if (e.target.classList.contains('delete-task')) {
+            deleteTask(e.target);
+        } else if (e.target.classList.contains('edit-task')) {
+            editTask(e.target);
+        } else if (e.target.classList.contains('complete-task')) {
+            toggleTaskComplete(e.target);
+        }
+    });
+
+    function addTask(task) {
+        const li = document.createElement('li');
+        li.innerHTML = `
+            <span>${task}</span>
+            <div class="task-buttons">
+                <button class="complete-task">Complete</button>
+                <button class="edit-task">Edit</button>
+                <button class="delete-task">Delete</button>
+            </div>
+        `;
+        taskList.appendChild(li);
+    }
+
+    function deleteTask(button) {
+        const li = button.parentElement.parentElement;
+        taskList.removeChild(li);
+    }
+
+    function editTask(button) {
+        const li = button.parentElement.parentElement;
+        const span = li.querySelector('span');
+        const newTask = prompt('Edit your task', span.textContent);
+        if (newTask !== null) {
+            span.textContent = newTask;
+        }
+    }
+
+    function toggleTaskComplete(button) {
+        const li = button.parentElement.parentElement;
+        li.classList.toggle('completed');
+    }
+});
